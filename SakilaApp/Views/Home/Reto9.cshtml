@@ -1,0 +1,13 @@
+@{
+    ViewData["Title"] = "Reto 9 - Total Clientes";
+}
+
+<h1>Reto 9: Cantidad total de clientes registrados</h1>
+<a asp-action="Index" class="btn btn-secondary mb-3">Volver al Inicio</a>
+
+<div class="card shadow-sm mt-4">
+    <div class="card-body text-center">
+        <h3 class="card-title text-primary">Total de Clientes en Sakila</h3>
+        <h1 class="display-1 fw-bold text-success">@ViewBag.CantidadTotal</h1>
+    </div>
+</div>

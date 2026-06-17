@@ -1,0 +1,44 @@
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+<ul class="navbar-nav ms-auto align-items-center">
+@if (SignInManager.IsSignedIn(User))
+{
+    <li class="nav-item me-2">
+        <a id="manage" class="nav-link text-white d-flex align-items-center gap-1"
+           asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+            <i class="bi bi-person-circle"></i>
+            <span>@UserManager.GetUserName(User)</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <form id="logoutForm" asp-area="Identity" asp-page="/Account/Logout"
+              asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })"
+              method="post">
+            <button id="logout" type="submit"
+                    class="btn btn-outline-light btn-sm d-flex align-items-center gap-1">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Cerrar sesión</span>
+            </button>
+        </form>
+    </li>
+}
+else
+{
+    <li class="nav-item me-1">
+        <a class="nav-link text-white d-flex align-items-center gap-1"
+           id="register" asp-area="Identity" asp-page="/Account/Register">
+            <i class="bi bi-person-plus"></i>
+            <span>Registrarse</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="btn btn-outline-light btn-sm d-flex align-items-center gap-1"
+           id="login" asp-area="Identity" asp-page="/Account/Login">
+            <i class="bi bi-box-arrow-in-right"></i>
+            <span>Iniciar sesión</span>
+        </a>
+    </li>
+}
+</ul>

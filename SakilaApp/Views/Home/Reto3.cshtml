@@ -1,0 +1,38 @@
+@model IEnumerable<SakilaApp.Models.Film>
+@{
+    ViewData["Title"] = "Reto 3 - Buscar Película";
+}
+
+<h1>Reto 3: Buscar película por título</h1>
+<a asp-action="Index" class="btn btn-secondary mb-3">Volver al Inicio</a>
+
+<form method="get" asp-action="Reto3" class="mb-4 d-flex gap-2">
+    <input type="text" name="keyword" class="form-control" placeholder="Ingrese una palabra clave..." required />
+    <button type="submit" class="btn btn-primary">Buscar</button>
+</form>
+
+@if(Model != null && Model.Any())
+{
+    <table class="table table-striped table-hover table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>Título</th>
+                <th>Descripción</th>
+                <th>Año de Lanzamiento</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model) {
+            <tr>
+                <td>@item.Title</td>
+                <td>@item.Description</td>
+                <td>@item.ReleaseYear</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+else if (Context.Request.Query.ContainsKey("keyword"))
+{
+    <div class="alert alert-warning">No se encontraron películas con esa palabra clave.</div>
+}

@@ -1,0 +1,38 @@
+@model IEnumerable<SakilaApp.Models.Actor>
+@{
+    ViewData["Title"] = "Reto 16 - Actores por Letra";
+}
+
+<h1>Reto 16: Buscar actores por inicial del apellido</h1>
+<a asp-action="Index" class="btn btn-secondary mb-3">Volver al Inicio</a>
+
+<form method="get" asp-action="Reto16" class="mb-4 d-flex gap-2">
+    <input type="text" name="initial" class="form-control" placeholder="Ingrese una letra (ej. S)..." required maxlength="1" />
+    <button type="submit" class="btn btn-primary">Buscar</button>
+</form>
+
+@if(Model != null && Model.Any())
+{
+    <table class="table table-striped table-hover table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Última Actualización</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model) {
+            <tr>
+                <td>@item.FirstName</td>
+                <td>@item.LastName</td>
+                <td>@item.LastUpdate</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+else if (Context.Request.Query.ContainsKey("initial"))
+{
+    <div class="alert alert-warning">No se encontraron actores cuyo apellido empiece con esa letra.</div>
+}

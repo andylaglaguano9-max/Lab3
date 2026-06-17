@@ -1,0 +1,833 @@
+
+
+
+DEPARTAMENTO:
+Ciencias de la computación
+CARRERA:
+ITIN
+ASIGNATURA:
+DESARROLLO WEB PARA INTEGRACION DE LA TECNOLOGIA
+NIVEL:
+6to
+FECHA:
+07/06/2026
+DOCENTE:
+Ing. Geovanny Jose Brito Casanova
+PRÁCTICA N°:
+2
+CALIFICACIÓN:
+
+Aplicación de conexión a datos con ASP.NET Core, EF Core y PostgreSQL
+Laglaguano Villavicencio Andy Joel
+701357216821
+RESUMEN
+En esta práctica se desarrolló una aplicación web robusta orientada a la gestión de datos utilizando el framework ASP.NET Core MVC y Entity Framework (EF) Core para establecer la conexión con una base de datos PostgreSQL existente denominada "Sakila". El trabajo tuvo como propósito principal implementar el enfoque Database First, permitiendo generar de forma automática los modelos de dominio y el contexto de datos (DbContext) directamente desde el esquema relacional.
+Para ello, se configuró el entorno local instalando los paquetes NuGet necesarioss, se definió la cadena de conexión en el archivo de configuración y se procedió con el scaffolding de las entidades. Posteriormente, se desarrollaron módulos CRUD funcionales para gestionar Actores y Películas, garantizando la correcta lectura y manipulación de registros. Además, se resolvieron cinco retos analíticos utilizando sentencias de Language Integrated Query (LINQ), aplicando operadores
+como Where, OrderByDescending y Take para filtrar, ordenar y agrupar datos de manera eficiente. Como etapa final, se integraron mejoras visuales en la interfaz gráfica utilizando el framework CSS Bootstrap, optimizando la presentación de las tablas y los botones de acción. Las pruebas realizadas confirmaron que la aplicación es capaz de traducir adecuadamente las consultas LINQ a SQL nativo, delegando el procesamiento al motor PostgreSQL. En conclusión, la práctica permitió afianzar conocimientos sobre el patrón MVC, el mapeo objeto-relacional inverso y el uso de consultas integradas en lenguajes fuertemente tipados.
+Palabras clave: ASP.NET Core, Entity Framework Core, LINQ, PostgreSQL, Database First.
+INTRODUCCIÓN:
+En el desarrollo contemporáneo de software empresarial, la eficiencia en la comunicación entre la lógica de negocio y las bases de datos relacionales es un factor crítico. Históricamente, los desarrolladores debían escribir de forma manual extensas sentencias SQL combinadas con código de aplicación, lo cual propiciaba vulnerabilidades como la inyección SQL y dificultaba el mantenimiento del sistema frente a cambios en la estructura de los datos (Freeman, 2022). Frente a esto, las herramientas de Mapeo Objeto-Relacional (ORM) han revolucionado la forma de persistir datos, permitiendo tratar las tablas como clases y los registros como objetos nativos del lenguaje.
+Dentro del ecosistema .NET, Entity Framework Core se destaca como el ORM oficial, ofreciendo múltiples enfoques de desarrollo. Cuando se trabaja en entornos corporativos, es habitual encontrarse con bases de datos preexistentes o sistemas heredados (Legacy). En este escenario, el enfoque Database First resulta imprescindible, ya que automatiza la creación del modelo de clases (ingeniería inversa) a partir del esquema físico de la base de datos, ahorrando horas de codificación manual y reduciendo drásticamente los errores de mapeo (Smith, 2021).
+Por otro lado, la extracción y análisis de la información requiere de lenguajes de consulta potentes. Language Integrated Query (LINQ) resuelve esta necesidad al integrar capacidades de consulta de manera declarativa directamente en C#. Esto permite a los programadores filtrar, ordenar y proyectar colecciones de datos utilizando una sintaxis tipada y evaluada en tiempo de compilación, la cual es posteriormente traducida a sentencias SQL altamente optimizadas para motores robustos como PostgreSQL (Obe &amp; Hsu, 2017).
+Finalmente, en el presente laboratorio se desarrolló una solución práctica orientada a implementar la conexión de una aplicación web MVC a la base de datos Sakila. A través de la configuración de paquetes, el scaffolding de entidades y el uso de LINQ para la resolución de retos específicos, estas actividades permitieron aplicar conceptos actuales de ingeniería de software, arquitectura de datos y diseño de interfaces en un entorno local, comprobando su funcionamiento de manera visual y funcional.
+OBJETIVO(S):
+General
+Desarrollar e implementar una aplicación web en ASP.NET Core MVC conectada a la base de datos PostgreSQL "Sakila" mediante Entity Framework Core, utilizando el enfoque Database First para la generación de entidades,
+
+e integrando consultas avanzadas LINQ y estilos visuales Bootstrap, con el fin de comprender y aplicar de manera práctica los principios de mapeo objeto-relacional y manipulación eficiente de datos.
+Específicos
+Configurar el entorno del proyecto instalando los paquetes NuGet requeridos de EF Core y Npgsql, y ejecutar el proceso de Scaffolding para realizar la ingeniería inversa de las tablas.
+Construir módulos CRUD operativos para las entidades de Actores y Películas, garantizando las operaciones básicas de acceso a datos.
+Resolver cinco retos analíticos utilizando sentencias LINQ (filtrado, ordenamiento y agregación) e implementar mejoras estéticas en la interfaz de usuario mediante Bootstrap.
+MARCO TEÓRICO:
+Arquitectura de ASP.NET Core MVC
+El patrón Modelo-Vista-Controlador (MVC) es un paradigma de arquitectura de software que separa la aplicación en tres componentes interconectados. En el contexto de ASP.NET Core, el Modelo representa la capa de acceso y estructura de los datos, la Vista se encarga de la interfaz gráfica servida al cliente (HTML/CSS), y el Controlador actúa como intermediario procesando las peticiones HTTP y orquestando la respuesta. Según Freeman (2022), esta separación de responsabilidades no solo mejora la escalabilidad del código, sino que resulta fundamental en entornos de desarrollo ágil, ya que permite que diseñadores de UI y programadores back-end trabajen de forma paralela sin afectar la lógica core del sistema.
+Entity Framework Core y el paradigma "Database First"
+Entity Framework (EF) Core es un framework de mapeo objeto-relacional (ORM) ligero y multiplataforma. Facilita la interacción con bases de datos al eliminar la necesidad de usar ADO.NET clásico y comandos SQL en duro. El paradigma Database First es una estrategia en la que el esquema de la base de datos dicta la estructura de las clases en el código fuente. Según Smith (2021), a través de herramientas de interfaz de línea de comandos (CLI), EF Core lee los metadatos del motor relacional y genera automáticamente tanto las clases de entidad plana (POCO) como el DbContext encargado del rastreo de cambios. Esto es esencial para integrar aplicaciones modernas con repositorios de datos legados.
+Integración con PostgreSQL y consultas LINQ
+PostgreSQL es reconocido a nivel mundial como uno de los sistemas de bases de datos relacionales orientados a objetos más avanzados y confiables, caracterizado por su robustez transaccional y su compatibilidad con el estándar SQL (Obe &amp; Hsu, 2017). La comunicación entre C# y PostgreSQL se logra fluidamente a través del proveedor Npgsql. Una vez establecida la conexión, los desarrolladores utilizan LINQ (Language Integrated Query) para interactuar con los datos. LINQ introduce capacidades de consulta funcionales dentro del lenguaje C#, permitiendo usar operadores como .Where(), .OrderBy() y .Select(). La gran ventaja de LINQ en el contexto de EF Core es que la consulta se construye en memoria como un árbol de expresiones y, al momento de ejecutarse, el proveedor Npgsql la traduce al dialecto SQL exacto de PostgreSQL, logrando ejecuciones rápidas y libres de inyecciones SQL (Liberty &amp; MacDonald, 2008).
+DESCRIPCIÓN DEL PROCEDIMIENTO:
+Creación del directorio de trabajo y preparación del entorno
+Como paso inicial, se abrió el editor de código Visual Studio Code junto con su terminal integrada (PowerShell) para preparar el espacio de trabajo. Se ejecutó el comando mkdir ClaseNet10SakilaPosgretsSQL con el fin de crear la carpeta principal que alojará el proyecto, y posteriormente se ingresó a dicho directorio utilizando el comando cd ClaseNet10SakilaPosgretsSQL. Como se muestra en la Figura 1, este procedimiento permitió aislar el entorno de trabajo dentro de la ruta correspondiente a la Práctica 2, dejando la terminal lista para la generación del proyecto MVC y la instalación de dependencias en los pasos siguientes.
+Figura 1
+Creación y navegación al directorio del proyecto desde la terminal de Visual Studio Code.
+
+
+
+Restauración de la base de datos Sakila en PostgreSQL
+Antes de iniciar el desarrollo de la aplicación web, fue necesario preparar el entorno de base de datos. Utilizando la herramienta administrativa pgAdmin 4, se procedió a crear una base de datos vacía denominada "sakila". Posteriormente, haciendo clic derecho sobre dicha base de datos, se seleccionó la opción "Restore..." para cargar el esquema y los datos desde un archivo de respaldo (backup) preexistente. Como se muestra en la Figura 2, este procedimiento es vital para garantizar que las tablas, relaciones y registros necesarios para la práctica estén disponibles en el motor PostgreSQL antes de intentar realizar la conexión y la ingeniería inversa con Entity Framework Core.
+Figura 2
+Opciones de restauración de la base de datos "sakila" en pgAdmin 4
+
+Verificación de las tablas restauradas en PostgreSQL
+Una vez finalizado el proceso de restauración, se procedió a desplegar el árbol de objetos dentro de pgAdmin 4 para confirmar la estructura de la base de datos. Como se puede evidenciar en la Figura 3, al expandir la sección de "Tables" se visualizaron correctamente las 21 tablas principales que componen el esquema relacional de Sakila, entre las cuales destacan actor, film, customer e inventory. Esta verificación visual fue fundamental para asegurar que los datos estaban completos y listos para ser mapeados por Entity Framework Core.
+Figura 3
+Visualización de las tablas del esquema Sakila en pgAdmin 4 tras la restauración.
+
+
+
+
+Creación de la estructura del proyecto e instalación de paquetes
+Estando dentro del directorio recién creado, se utilizó la CLI de .NET para generar un nuevo proyecto web bajo el patrón MVC, especificando explícitamente el uso de .NET 10.0 mediante el comando dotnet new mvc -n SakilaApp -f net10.0. A continuación, se procedió a ingresar al directorio del proyecto y se instalaron vía línea de comandos todas las dependencias NuGet necesarias para habilitar Entity Framework Core, la conexión a PostgreSQL y las herramientas de generación de código.
+
+# CreaciÃ³n del proyecto MVC
+dotnet new mvc -n SakilaApp -f net10.0
+cd SakilaApp
+
+# InstalaciÃ³n de paquetes para EF Core y PostgreSQL
+dotnet add package Npgsql.EntityFrameworkCore.PostgreSQL --version 10.0.1
+dotnet add package Microsoft.EntityFrameworkCore.Design --version 10.0.2
+dotnet add package Microsoft.EntityFrameworkCore.Tools --version 10.0.2
+dotnet add package Microsoft.VisualStudio.Web.CodeGeneration.Design --version 10.0.2
+# CreaciÃ³n del proyecto MVC
+dotnet new mvc -n SakilaApp -f net10.0
+cd SakilaApp
+
+# InstalaciÃ³n de paquetes para EF Core y PostgreSQL
+dotnet add package Npgsql.EntityFrameworkCore.PostgreSQL --version 10.0.1
+dotnet add package Microsoft.EntityFrameworkCore.Design --version 10.0.2
+dotnet add package Microsoft.EntityFrameworkCore.Tools --version 10.0.2
+dotnet add package Microsoft.VisualStudio.Web.CodeGeneration.Design --version 10.0.2
+Como se muestra en la Figura 4, la consola confirma la creación correcta de la plantilla web y su posterior restauración, preparando el entorno local para las siguientes etapas de configuración y mapeo.
+
+Figura 4
+Creación de la aplicación ASP.NET Core MVC con .NET 10.0 desde la terminal.
+
+
+Instalación de dependencias NuGet
+A continuación, se procedió a ingresar al directorio del proyecto (cd SakilaApp) y se instalaron vía línea de comandos todas las dependencias NuGet necesarias para habilitar Entity Framework Core, la conexión a PostgreSQL y las herramientas de generación de código requeridas para el scaffolding.
+
+cd SakilaApp
+dotnet add package Npgsql.EntityFrameworkCore.PostgreSQL --version 10.0.1
+dotnet add package Microsoft.EntityFrameworkCore.Design --version 10.0.2
+dotnet add package Microsoft.EntityFrameworkCore.Tools --version 10.0.2
+dotnet add package Microsoft.VisualStudio.Web.CodeGeneration.Design --version 10.0.2
+cd SakilaApp
+dotnet add package Npgsql.EntityFrameworkCore.PostgreSQL --version 10.0.1
+dotnet add package Microsoft.EntityFrameworkCore.Design --version 10.0.2
+dotnet add package Microsoft.EntityFrameworkCore.Tools --version 10.0.2
+dotnet add package Microsoft.VisualStudio.Web.CodeGeneration.Design --version 10.0.2
+Como se evidencia en la Figura 5, la consola descarga e integra exitosamente las bibliotecas requeridas.
+
+Figura 5
+Instalación de paquetes NuGet para Entity Framework Core y PostgreSQL en la terminal.
+
+
+Actualización de herramientas globales de .NET
+Para asegurar la compatibilidad durante la fase de generación de código (scaffolding), se verificó y actualizó el estado de las herramientas globales de Entity Framework (dotnet-ef) y del generador de código (dotnet-aspnet-codegenerator) a la versión especificada mediante la CLI.
+
+dotnet tool update -g dotnet-ef --version 10.0.2
+dotnet tool update -g dotnet-aspnet-codegenerator --version 10.0.2
+dotnet tool update -g dotnet-ef --version 10.0.2
+dotnet tool update -g dotnet-aspnet-codegenerator --version 10.0.2
+Como se aprecia en la Figura 6, el sistema validó las instalaciones existentes, indicando que las herramientas ya se encontraban disponibles en el equipo, confirmando que el entorno global estaba listo para la ingeniería inversa.
+Figura 6
+Actualización y validación de herramientas globales de .NET en la terminal
+*
+Creación de usuario y asignación de privilegios en PostgreSQL
+Para garantizar la seguridad y seguir el principio de mínimo privilegio en el acceso a los datos, se procedió a crear un nuevo rol de usuario dentro de la herramienta de consulta (Query Tool) de pgAdmin 4. Se creó el usuario cruduser con su respectiva contraseña y se le otorgaron todos los privilegios sobre la base de datos sakila. Como se evidencia en la Figura 7, este usuario dedicado será el que se utilice posteriormente para la cadena de conexión de la aplicación, evitando así el uso de la cuenta principal de superusuario del motor de base de datos.
+Figura 7
+Comandos SQL para la creación del usuario de acceso y asignación de permisos en la base de datos Sakila.
+
+
+Ingeniería inversa (Scaffolding Database First)
+Con la conexión definida, se procedió a generar los modelos utilizando el motor de herramientas de EF Core. Se ejecutó el comando dbcontext scaffold para analizar la base de datos Sakila y generar automáticamente las entidades equivalentes en la carpeta Models y el contexto de datos en la carpeta Data.
+Como se observa en la Figura 8, este comando leyó el esquema público y creó archivos .cs para cada tabla, además de configurar el archivo principal SakilaContext.cs que actúa como el puente de datos. La consola reporta
+
+algunas advertencias de tipos Enum no mapeables, pero finaliza con un "Build succeeded", confirmando la generación exitosa.
+Figura 8
+Ejecución exitosa del comando Scaffold-DbContext en la terminal.
+
+
+Como resultado de esta operación, en la Figura 9 se puede verificar la creación de las clases modelo dentro de la carpeta Models en el explorador de soluciones de Visual Studio Code, donde destacan entidades
+como Actor.cs, Film.cs y Customer.cs.
+
+Figura 9
+3687064206562Visualización de las clases modelo generadas en la carpeta Models.
+Configuración de la cadena de conexión en appsettings.json
+Una vez preparados los modelos mediante la ingeniería inversa, se procedió a definir de forma segura la cadena de conexión (Connection String) en el archivo de configuración global appsettings.json. Esto permite que la aplicación en tiempo de ejecución se conecte a la base de datos utilizando exactamente las mismas credenciales (cruduser) que funcionaron durante el scaffolding.
+1129347136359
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*",
+  "ConnectionStrings": {
+    "DefaultConnection": "Host=localhost;Port=5432;Database=sakila;Username=cruduser;Password=crud123"
+  }
+}
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*",
+  "ConnectionStrings": {
+    "DefaultConnection": "Host=localhost;Port=5432;Database=sakila;Username=cruduser;Password=crud123"
+  }
+}
+Como se muestra en la Figura 10, el parámetro DefaultConnection quedó establecido de forma estructurada y listo para ser consumido por el contenedor de inyección de dependencias.
+
+Figura 10
+2400554206655Archivo appsettings.json con la cadena de conexión configurada correctamente.
+
+Inyección de Dependencias del DbContext en Program.cs
+Para que toda la aplicación pueda solicitar acceso a la base de datos sin instanciar clases manualmente, se registró el SakilaContext dentro del contenedor de servicios en el archivo Program.cs. A continuación se presenta el código:
+1129347134907
+using Microsoft.EntityFrameworkCore;
+using SakilaApp.Data;
+
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddControllersWithViews();
+
+builder.Services.AddDbContext<SakilaContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+var app = builder.Build();
+
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/Home/Error");
+    app.UseHsts();
+}
+
+app.UseHttpsRedirection();
+app.UseStaticFiles();
+app.UseRouting();
+app.UseAuthorization();
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.Run();
+using Microsoft.EntityFrameworkCore;
+using SakilaApp.Data;
+
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddControllersWithViews();
+
+builder.Services.AddDbContext<SakilaContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+var app = builder.Build();
+
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/Home/Error");
+    app.UseHsts();
+}
+
+app.UseHttpsRedirection();
+app.UseStaticFiles();
+app.UseRouting();
+app.UseAuthorization();
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.Run();
+Como se evidencia en la Figura 11, la instrucción AddDbContext junto con UseNpgsql enlaza la cadena de configuración declarada en el paso anterior con el motor del ORM.
+
+Figura 11
+Registro del servicio PostgreSQL en Program.cs.
+
+
+Restauración y compilación del proyecto
+Luego de registrar el contexto en el archivo Program.cs, se procedió a restaurar las dependencias y compilar el proyecto mediante los comandos dotnet restore y dotnet build en la terminal. Como se evidencia en la Figura 12, la compilación se completó de manera exitosa confirmando que la inyección de dependencias y la estructura del proyecto son correctas.
+
+
+Figura 12
+Ejecución exitosa de los comandos dotnet restore y dotnet build en la terminal.
+
+
+Ejecución inicial de la aplicación web
+Para corroborar el correcto funcionamiento de toda la configuración previa, se procedió a iniciar la aplicación web (utilizando el comando dotnet run o el depurador integrado). Como se ilustra en la Figura 13, el servidor web interno (Kestrel) levantó el servicio con éxito y se asignó el puerto local 5032. Al navegar a la URL http://localhost:5032/, el sistema de enrutamiento MVC procesó la petición hacia el controlador HomeController y devolvió la vista estática de bienvenida. Esta prueba visual es clave, ya que confirma que toda la arquitectura base de ASP.NET Core se encuentra activa, respondiendo a peticiones HTTP y lista para que se integren las nuevas vistas que consumirán los datos de PostgreSQL.
+Figura 13
+Renderizando la vista de inicio predeterminada del patrón MVC.
+
+
+Generación del controlador y resolución de errores (Scaffolding de UI)
+Para construir la interfaz de usuario, se procedió a generar automáticamente las vistas y el controlador para la entidad Actor utilizando la herramienta aspnet-codegenerator. Como paso previo, se instaló el paquete Microsoft.EntityFrameworkCore.SqlServer para satisfacer los requisitos internos del motor de generación de ASP.NET. Sin embargo, al ejecutar el comando de scaffolding, la consola arrojó una excepción indicando: Unable to resolve service for type 'Microsoft.EntityFrameworkCore.DbContextOptions'1.  Como se detalla en la Figura 14, este
+error de inyección de dependencias en tiempo de diseño ocurre cuando el generador de código no logra instanciar el SakilaContext, lo cual requiere revisar el constructor del contexto de datos o la configuración de los servicios en Program.cs.
+Figura 14
+Error de inyección de dependencias durante la ejecución del comando aspnet-codegenerator.
+
+
+Verificación de las Vistas generadas (Scaffolding exitoso)
+Una vez resuelto el problema de inyección de dependencias, se ejecutó nuevamente el comando de scaffolding de forma exitosa. Como evidencia de este proceso, en la Figura 15 se puede observar el explorador de archivos de Visual Studio Code mostrando la estructura de carpetas recién creada. Dentro de la carpeta Views, el generador creó automáticamente el subdirectorio Actors conteniendo todos los archivos Razor (.cshtml) necesarios para las operaciones CRUD (Create, Delete, Details, Edit, Index). Esta verificación visual confirma que la base del módulo de Actores quedó correctamente construida y lista para integrarse en la navegación de la aplicación web.
+Figura 15
+Visualización en el explorador de archivos de las vistas generadas para el controlador Actors.
+
+
+Generación del controlador y vistas para Películas
+Tras haber resuelto las dependencias y verificado que el andamiaje (scaffolding) funciona correctamente para el módulo de Actores, se procedió a generar de forma equivalente el módulo de Películas. En la terminal se ejecutó el comando aspnet-codegenerator controller indicando FilmsController como controlador y Film como modelo. Como se observa en la Figura 16, el motor de plantillas de ASP.NET Core procesó la instrucción exitosamente, confirmando la adición del archivo FilmsController.cs y de todas sus vistas asociadas
+(Create.cshtml, Edit.cshtml, Details.cshtml, Delete.cshtml e Index.cshtml). Esto estableció la base funcional para administrar los registros de películas.
+
+Figura 16
+1999614206271Ejecución exitosa del comando aspnet-codegenerator para el controlador y vistas de Películas.
+
+Asignación de permisos granulares en PostgreSQL para el CRUD
+Al preparar el aplicativo para realizar operaciones de lectura y escritura, se identificó que el rol cruduser requería permisos explícitos sobre las tablas y secuencias del esquema público de Sakila para evitar bloqueos. Como se detalla en la Figura 17, se retornó a la herramienta de consultas de pgAdmin 4 y se ejecutaron las
+sentencias GRANT correspondientes. Se otorgaron los privilegios SELECT, INSERT, UPDATE y DELETE sobre
+
+todas las tablas, además de USAGE y SELECT sobre las secuencias. Esto garantizó que Entity Framework Core tuviera la capacidad técnica completa para operar las funciones del CRUD de Películas y Actores sin restricciones de acceso.
+Figura 17
+Comandos SQL de otorgamiento de permisos para operaciones de manipulación de datos.
+2496439161992
+
+Implementación del CRUD para Películas (Operador LINQ OrderByDescending)
+Luego de generar la estructura base de las vistas y controladores mediante el comando aspnet-codegenerator, se modificó el controlador FilmsController.cs para cumplir con la consulta obligatoria del laboratorio: utilizar el operador OrderByDescending.
+
+// Dentro de FilmsController.cs
+public async Task<IActionResult> Index()
+{
+    var peliculas = await _context.Films
+        .OrderByDescending(f => f.ReleaseYear)
+        .ThenBy(f => f.Title)
+        .Take(100)
+        .ToListAsync();
+
+    return View(peliculas);
+}
+// Dentro de FilmsController.cs
+public async Task<IActionResult> Index()
+{
+    var peliculas = await _context.Films
+        .OrderByDescending(f => f.ReleaseYear)
+        .ThenBy(f => f.Title)
+        .Take(100)
+        .ToListAsync();
+
+    return View(peliculas);
+}
+Como muestra la Figura 18, la lista de películas se recupera ordenada descendentemente por su año de lanzamiento, limitando el número de resultados a 100 mediante .Take(100) para optimizar la carga visual.
+Figura 18
+Captura de la aplicación ejecutando el CRUD principal de Películas ordenado.
+
+
+Resolución de los 5 Retos LINQ Aleatorios
+Para abordar los desafíos analíticos de la rúbrica, se crearon métodos específicos en el controlador principal HomeController.cs. Esto permitió centralizar las consultas y brindar acceso directo desde el menú inicial de la aplicación web.
+Reto 2: Mostrar las 10 películas más largas
+
+
+
+public async Task<IActionResult> Reto2()
+{
+    var peliculas = await _context.Films
+        .OrderByDescending(f => f.Length)
+        .Take(10)
+        .ToListAsync();
+    return View(peliculas);
+}
+public async Task<IActionResult> Reto2()
+{
+    var peliculas = await _context.Films
+        .OrderByDescending(f => f.Length)
+        .Take(10)
+        .ToListAsync();
+    return View(peliculas);
+}
+Figura 19
+Ejecución de reto 2: Mostrar 10 películas mas largas
+
+
+Reto 3: Películas cuyo título contenga una palabra ingresada
+
+public async Task<IActionResult> Reto3(string keyword)
+{
+    if (string.IsNullOrEmpty(keyword)) return View(new List<Film>());
+    var peliculas = await _context.Films
+        .Where(f => EF.Functions.ILike(f.Title, $"%{keyword}%"))
+        .ToListAsync();
+    return View(peliculas);
+}
+public async Task<IActionResult> Reto3(string keyword)
+{
+    if (string.IsNullOrEmpty(keyword)) return View(new List<Film>());
+    var peliculas = await _context.Films
+        .Where(f => EF.Functions.ILike(f.Title, $"%{keyword}%"))
+        .ToListAsync();
+    return View(peliculas);
+}
+Figura 20
+Ejecución de reto 3: Buscar película por titulo
+
+Reto 9: Cantidad total de clientes registrados
+
+public async Task<IActionResult> Reto9()
+{
+    ViewBag.CantidadTotal = await _context.Customers.CountAsync();
+    return View();
+}
+public async Task<IActionResult> Reto9()
+{
+    ViewBag.CantidadTotal = await _context.Customers.CountAsync();
+    return View();
+}
+
+
+Figura 21
+Ejecución de reto 9: Cantidad total de clientes
+
+Reto 16: Mostrar actores cuyo apellido empiece con una letra determinada
+
+public async Task<IActionResult> Reto16(string initial)
+{
+    if (string.IsNullOrEmpty(initial)) return View(new List<Actor>());
+    var actores = await _context.Actors
+        .Where(a => EF.Functions.ILike(a.LastName, $"{initial}%"))
+        .ToListAsync();
+    return View(actores);
+}
+public async Task<IActionResult> Reto16(string initial)
+{
+    if (string.IsNullOrEmpty(initial)) return View(new List<Actor>());
+    var actores = await _context.Actors
+        .Where(a => EF.Functions.ILike(a.LastName, $"{initial}%"))
+        .ToListAsync();
+    return View(actores);
+}
+Figura 22
+Ejecución de reto 16: Mostrar actores cuyo apellido empiece con una letra determinada
+
+
+Reto 17: Primeras 10 películas ordenadas alfabéticamente
+
+public async Task<IActionResult> Reto17()
+{
+    var peliculas = await _context.Films
+        .OrderBy(f => f.Title)
+        .Take(10)
+        .ToListAsync();
+    return View(peliculas);
+}
+public async Task<IActionResult> Reto17()
+{
+    var peliculas = await _context.Films
+        .OrderBy(f => f.Title)
+        .Take(10)
+        .ToListAsync();
+    return View(peliculas);
+}
+Como se aprecia en la Figura 23, cada uno de estos métodos utiliza una combinación distinta de operadores nativos de LINQ (Where, ILike, CountAsync, Take), interactuando de forma transparente con el contexto _context.
+Figura 23
+Ejecución reto 17: Primeras 10 películas ordenadas alfabéticamente
+
+
+
+
+
+
+EVIDENCIA DE CONSULTAS ADICIONALES (FILMSCONTROLLER)
+A continuación, se documentan las distintas consultas SQL y expresiones LINQ ejecutadas en el controlador FilmsController.cs, incluyendo sus respectivas capturas de pantalla que validan el correcto funcionamiento en el servidor local de desarrollo.
+1. Consulta de Join Básico (Idiomas no ingleses)
+Esta consulta realiza una unión (Join) entre las tablas Films y Languages para obtener aquellas películas cuyo idioma original no sea el inglés, ordenadas alfabéticamente por título.
+var query = await _context.Films
+    .Join(_context.Languages,
+        film => film.LanguageId,
+        language => language.LanguageId,
+        (film, language) => new { film, language })
+    .Where(x => x.language.Name != "English")
+    .OrderBy(x => x.film.Title)
+    .ToListAsync();
+
+var peliculas = query.Select(x => 
+{
+    x.film.Language = x.language;
+    return x.film;
+}).ToList();
+
+
+Figura 25
+Ejecución de la consulta de Join Básico (Idiomas no ingleses).
+
+2. Consulta de Reto Action (Categoría Action)
+Esta consulta realiza la unión de las tablas de Películas, Categoría de Película y Categorías, filtrando únicamente por aquellas que pertenecen al género de Acción y ordenándolas por título.
+var peliculas = await _context.Films
+    .Join(_context.FilmCategories,
+        film => film.FilmId,
+        filmCategory => filmCategory.FilmId,
+        (film, filmCategory) => new { film, filmCategory })
+    .Join(_context.Categories,
+        temp => temp.filmCategory.CategoryId,
+        category => category.CategoryId,
+        (temp, category) => new { temp.film, category })
+    .Where(x => x.category.Name == "Action")
+    .OrderBy(x => x.film.Title)
+    .Select(x => x.film)
+    .ToListAsync();
+
+
+Figura 26
+Ejecución de la consulta de Reto Action (Categoría Action).
+
+3. Consulta de Reto Drama Top 10
+Esta consulta obtiene las 10 películas de la categoría de Drama que poseen la mayor duración (Length), ordenadas de mayor a menor.
+var query = await _context.Films
+    .Include(f => f.Language) 
+    .Join(_context.FilmCategories,
+        film => film.FilmId,
+        filmCategory => filmCategory.FilmId,
+        (film, filmCategory) => new { film, filmCategory })
+    .Join(_context.Categories,
+        temp => temp.filmCategory.CategoryId,
+        category => category.CategoryId,
+        (temp, category) => new { temp.film, temp.filmCategory, category })
+    .Where(x => x.category.Name == "Drama")
+    .OrderByDescending(x => x.film.Length)
+    .Take(10)
+    .ToListAsync();
+
+var peliculas = query.Select(x => 
+{
+    x.filmCategory.Category = x.category;
+    x.film.FilmCategories.Add(x.filmCategory);
+    return x.film;
+}).ToList();
+
+
+Figura 27
+Ejecución de la consulta de Reto Drama Top 10.
+
+4. Consulta de Reto 3 Joins - Comedy
+Esta consulta realiza tres uniones relacionales (Films, Languages, FilmCategories y Categories) para obtener películas en idioma inglés y de género Comedia, ordenadas por su título.
+var query = await _context.Films
+    .Join(_context.Languages,
+        film => film.LanguageId,
+        language => language.LanguageId,
+        (film, language) => new { film, language })
+    .Join(_context.FilmCategories,
+        temp => temp.film.FilmId,
+        filmCategory => filmCategory.FilmId,
+        (temp, filmCategory) => new { temp.film, temp.language, filmCategory })
+    .Join(_context.Categories,
+        temp => temp.filmCategory.CategoryId,
+        category => category.CategoryId,
+        (temp, category) => new { temp.film, temp.language, temp.filmCategory, category })
+    .Where(x => x.language.Name == "English" &amp;&amp; x.category.Name == "Comedy")
+    .OrderBy(x => x.film.Title)
+    .ToListAsync();
+
+var peliculas = query.Select(x => 
+{
+    x.film.Language = x.language;
+    x.filmCategory.Category = x.category;
+    x.film.FilmCategories.Add(x.filmCategory);
+    return x.film;
+}).ToList();
+
+
+Figura 28
+Ejecución de la consulta de Reto 3 Joins - Comedy.
+
+5. Consulta de Reto Empieza con A
+Esta consulta obtiene las películas en idioma inglés cuyo título inicia con la letra A, ordenadas alfabéticamente.
+var query = await _context.Films
+    .Join(_context.Languages,
+        film => film.LanguageId,
+        language => language.LanguageId,
+        (film, language) => new { film, language })
+    .Where(x => x.language.Name == "English" &amp;&amp; EF.Functions.ILike(x.film.Title, "A%"))
+    .OrderBy(x => x.film.Title)
+    .ToListAsync();
+
+var peliculas = query.Select(x => 
+{
+    x.film.Language = x.language;
+    return x.film;
+}).ToList();
+
+
+Figura 29
+Ejecución de la consulta de Reto Empieza con A.
+
+6. Consulta de Reto 5 primeras películas (Top 5 Rental Rate)
+Esta consulta obtiene las 5 películas con el mayor precio de tarifa de alquiler (Rental Rate) de toda la base de datos.
+var peliculas = await _context.Films
+    .Include(f => f.Language)
+    .OrderByDescending(f => f.RentalRate)
+    .Take(5)
+    .ToListAsync();
+
+
+Figura 30
+Ejecución de la consulta de Reto 5 primeras películas (Top 5 Rental Rate).
+
+7. Buscador por Título
+Esta consulta filtra de manera dinámica las películas de acuerdo a un texto ingresado por el usuario en el buscador.
+var consulta = _context.Films.Include(f => f.Language).AsQueryable();
+
+if (!string.IsNullOrWhiteSpace(buscar))
+{
+    consulta = consulta.Where(f => f.Title.Contains(buscar));
+}
+
+var peliculas = await consulta
+    .OrderBy(f => f.Title)
+    .ToListAsync();
+
+
+Figura 31
+Ejecución del Buscador por Título.
+
+8. Buscador por Título y Duración Mínima
+Esta consulta permite realizar un filtro combinado: buscando películas por su título y que superen o igualen una duración mínima en minutos.
+var consulta = _context.Films.Include(f => f.Language).AsQueryable();
+
+if (!string.IsNullOrWhiteSpace(buscar))
+{
+    consulta = consulta.Where(f => f.Title.Contains(buscar));
+}
+
+if (duracionMinima.HasValue)
+{
+    consulta = consulta.Where(f => f.Length >= duracionMinima.Value);
+}
+
+var peliculas = await consulta
+    .OrderBy(f => f.Title)
+    .ToListAsync();
+
+
+Figura 32
+Ejecución del Buscador por Título y Duración Mínima.
+
+9. Implementación Final (Buscador, Duración y Paginación)
+Esta es la versión final optimizada para el listado principal de Películas, la cual implementa el buscador combinado y divide la información en páginas de 10 registros utilizando los operadores .Skip() y .Take(), logrando un gran rendimiento y previniendo la sobrecarga de datos en red.
+public async Task<IActionResult> Index(string? buscar, int? duracionMinima, int pagina = 1)
+{
+    int tamanioPagina = 10;
+    var consulta = _context.Films.Include(f => f.Language).AsQueryable();
+
+    if (!string.IsNullOrWhiteSpace(buscar))
+    {
+        consulta = consulta.Where(f => f.Title.Contains(buscar));
+    }
+
+    if (duracionMinima.HasValue)
+    {
+        consulta = consulta.Where(f => f.Length >= duracionMinima.Value);
+    }
+
+    int totalRegistros = await consulta.CountAsync();
+
+    var peliculas = await consulta
+        .OrderBy(f => f.Title)
+        .Skip((pagina - 1) * tamanioPagina)
+        .Take(tamanioPagina)
+        .ToListAsync();
+
+    ViewBag.Buscar = buscar;
+    ViewBag.DuracionMinima = duracionMinima;
+    ViewBag.PaginaActual = pagina;
+    ViewBag.TotalPaginas = (int)Math.Ceiling(totalRegistros / (double)tamanioPagina);
+
+    return View(peliculas);
+}
+
+
+Figura 33
+Ejecución de la implementación final con paginación.
+
+10. Registro y Configuración de Autenticación e Identidad en Program.cs
+Adicionalmente, se configuró en la aplicación el servicio de autenticación de ASP.NET Core Identity. Para ello, se registró un segundo DbContext (ApplicationDbContext) y se configuraron las opciones de seguridad de contraseñas de los usuarios en el archivo Program.cs.
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using SakilaApp.Data;
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddControllersWithViews();
+builder.Services.AddRazorPages();
+
+builder.Services.AddDbContext<SakilaContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services
+    .AddDefaultIdentity<IdentityUser>(options =>
+    {
+        options.SignIn.RequireConfirmedAccount = false;
+        options.Password.RequireDigit = true;
+        options.Password.RequireUppercase = true;
+        options.Password.RequireLowercase = true;
+        options.Password.RequiredLength = 6;
+    })
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<ApplicationDbContext>();
+
+var app = builder.Build();
+
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/Home/Error");
+    app.UseHsts();
+}
+
+app.UseHttpsRedirection();
+app.UseStaticFiles();
+app.UseRouting();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.MapRazorPages();
+
+app.Run();
+
+
+
+
+
+
+
+
+
+
+
+Implementación de mejoras visuales con Bootstrap
+Como requerimiento final, se procedió a estandarizar el aspecto gráfico de la aplicación. En las vistas (archivos .cshtml de la carpeta Views), se modificaron las etiquetas HTML en crudo para inyectarles clases CSS de Bootstrap. Se aplicaron clases como table-striped, table-hover y diversas tonalidades de botones (btn-primary, btn-danger).
+
+<!-- Ejemplo aplicado en Views/Actors/Index.cshtml -->
+<p>
+    <a asp-action="Create" class="btn btn-success mb-3">Create New</a>
+</p>
+
+<table class="table table-striped table-hover table-bordered">
+    <thead class="table-dark">
+        <tr>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model) {
+            <tr>
+                <td>@item.FirstName</td>
+                <td>@item.LastName</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.ActorId" class="btn btn-warning btn-sm">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@item.ActorId" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<!-- Ejemplo aplicado en Views/Actors/Index.cshtml -->
+<p>
+    <a asp-action="Create" class="btn btn-success mb-3">Create New</a>
+</p>
+
+<table class="table table-striped table-hover table-bordered">
+    <thead class="table-dark">
+        <tr>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model) {
+            <tr>
+                <td>@item.FirstName</td>
+                <td>@item.LastName</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.ActorId" class="btn btn-warning btn-sm">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@item.ActorId" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+Como se demuestra en la Figura 24, el cambio estructural en el HTML genera de inmediato una interfaz limpia, responsiva y orientada a la experiencia del usuario, finalizando así el ciclo de desarrollo técnico de la aplicación.
+Figura 24
+Evidencia visual de las tablas Bootstrap renderizadas
+
+
+ANÁLISIS DE RESULTADOS:
+La implementación del enfoque Database First y la inyección de dependencias mediante Entity Framework Core demostró ser altamente eficiente para abstraer la complejidad del acceso a datos. Al evaluar el rendimiento de la
+
+aplicación, el análisis comparativo entre las expresiones Lambda (LINQ) escritas en C# y su respectiva traducción a SQL nativo por parte del proveedor Npgsql, arrojó los siguientes resultados técnicos que validan la robustez de la arquitectura implementada:
+
+Módulo / Reto Implementado
+
+Expresión LINQ (C#)
+Traducción SQL Nativa Generada (PostgreSQL)
+
+Análisis Técnico y Rendimiento
+
+
+Listado Principal (Films)
+
+
+.OrderByDescending(f => f.ReleaseYear).Take(100)
+
+SELECT ... FROM
+film ORDER BY release_year DESC LIMIT 100;
+El ORM implementa
+Deferred Execution
+. El
+
+
+
+filtrado topológico y la limitación ocurren
+directamente en el motor PostgreSQL, minimizando el consumo de memoria RAM en el servidor ASP.NET al retornar únicamente los 100 registros estrictamente necesarios por la red.
+Reto 2 (Películas más largas)
+.OrderByDescending(f => f.Length).Take(10)
+SELECT ... FROM
+film ORDER BY length DESC LIMIT 10;
+Demuestra la capacidad del proveedor para mapear propiedades C# hacia las columnas físicas, garantizando un ordenamiento descendente eficiente aprovechando el motor de base de datos en lugar de ordenar colecciones en memoria.
+Retos 3 y 16 (Búsquedas Textuales)
+.Where(a => EF.Functions.ILike(a.LastName,
+$"{initial}%"))
+SELECT ... FROM
+actor WHERE last_name ILIKE 'S%';
+La función estática EF.Functions.ILike instruye al ORM a evadir la directiva genérica LIKE de SQL estándar, inyectando la instrucción ILIKE propia de PostgreSQL. Esto permite búsquedas insensibles a mayúsculas o minúsculas (case-insensitive) de alto rendimiento.
+Reto 9 (Agrupación y Conteo)
+await
+_context.Customers.CountAsync()
+SELECT COUNT(*) FROM
+customer;
+Confirma la eficiencia computacional del modelo. En lugar de descargar e instanciar cientos de objetos Customer en memoria para contarlos en la aplicación, EF Core delega la función de agregación escalar al motor relacional, devolviendo un único entero asíncronamente.
+
+GRÁFICOS O FOTOGRAFÍAS:
+N/A
+DISCUSIÓN:
+El desarrollo de esta práctica permitió contrastar la teoría de la arquitectura MVC con la implementación real de una solución basada en datos. En primer lugar, la aplicación del enfoque Database First evidenció una ventaja técnica significativa frente al diseño manual de clases. Al utilizar herramientas de ingeniería inversa para generar los modelos (POCOs) a partir de la base de datos preexistente, se garantizó una fidelidad absoluta entre el esquema físico de PostgreSQL y la lógica de dominio en C#, eliminando el margen de error humano en la definición de tipos de datos y mapeo de llaves foráneas.
+Durante la implementación de las operaciones CRUD y la resolución de retos analíticos, quedó expuesta la potencia del motor Entity Framework Core en la gestión del acceso a datos. La utilización de expresiones LINQ representó un cambio de paradigma respecto a las consultas SQL incrustadas como texto plano; al interactuar con el DbContext, el código se vuelve fuertemente tipado y seguro, delegando al compilador la tarea de verificar la coherencia de las propiedades. Además, se comprobó que el ORM evalúa las consultas de forma inteligente mediante el patrón de Ejecución Diferida, asegurando que el motor de PostgreSQL asuma el procesamiento pesado (como contar registros o buscar coincidencias de texto) y enviando a la capa web únicamente la información final solicitada.
+Por último, la fase de mejora visual sirvió como prueba empírica del principio de separación de preocupaciones (Separation of Concerns). La facilidad con la que se inyectaron componentes de Bootstrap en las Vistas HTML, sin necesidad de alterar una sola línea de código en los Controladores o Modelos subyacentes, reafirma que el patrón
+
+MVC permite una alta escalabilidad. Esto demuestra que la arquitectura elegida facilita el mantenimiento del software a largo plazo, posibilitando que la interfaz de usuario y la lógica de negocio evolucionen de forma independiente.
+CONCLUSIONES:
+La aplicación del enfoque Database First mediante Entity Framework Core demostró ser una estrategia altamente eficiente para la integración de bases de datos preexistentes. El uso de la herramienta de scaffolding automatizó la generación de las clases de dominio (Modelos) y el contexto de datos a partir del esquema de PostgreSQL, garantizando la consistencia estructural del proyecto y reduciendo significativamente los tiempos de desarrollo al evitar la configuración manual del mapeo objeto-relacional.
+La implementación de operaciones con LINQ evidenció una optimización sustancial en la capa de acceso a datos. Al resolver los distintos retos analíticos, se comprobó empíricamente que el proveedor Npgsql traduce de forma exacta los árboles de expresiones (C#) hacia consultas nativas (SQL), aprovechando el procesamiento interno de PostgreSQL para ejecutar operaciones de ordenamiento (OrderByDescending), conteo y filtrado de texto antes de transferir la carga de datos a la memoria del servidor web.
+La arquitectura MVC, apoyada por el motor de plantillas Razor y el generador de código (aspnet-codegenerator), permitió una separación impecable entre la lógica de control, los datos y la presentación. La viabilidad de este patrón quedó ratificada al integrar librerías de diseño como Bootstrap exclusivamente en la capa de Vistas, mejorando la usabilidad de los módulos CRUD sin acoplar dependencias ni afectar el funcionamiento de la lógica de negocio subyacente.
+BIBLIOGRAFÍA:
+Albahari, J. 2022. C# 10 in a Nutshell: The Definitive Reference, O'Reilly Reference Library, Editorial O'Reilly Media,
+pp. 1-1000. Fecha de consulta: 07 de junio de 2026. Sitio web: https://www.oreilly.com/library/view/c-10-in/9781098121276/
+Freeman, A. 2022. Pro ASP.NET Core 6: Develop Cloud-Ready Web Applications Using MVC, Apress IT Publications, Editorial Springer, pp. 100-150. Fecha de consulta: 07 de junio de 2026. Sitio web: https://link.springer.com/book/10.1007/978-1-4842-7957-1
+Lock, A. 2021. ASP.NET Core in Action, Manning Books, Editorial Manning Publications, pp. 1-50. Fecha de consulta: 07 de junio de 2026. Sitio web: https://www.manning.com/books/asp-net-core-in-action-second-edition
+Microsoft Corporation. 2023. Documentación de ASP.NET Core MVC, Microsoft Learn, Editorial Microsoft, Ubicación de la consulta: Online. Fecha de consulta: 07 de junio de 2026. Sitio web: https://learn.microsoft.com/es-es/aspnet/core/mvc/overview
+Microsoft Corporation. 2023. Documentación de Entity Framework Core - Enfoque Database First, Microsoft Learn, Editorial Microsoft, Ubicación de la consulta: Online. Fecha de consulta: 07 de junio de 2026. Sitio web: https://learn.microsoft.com/es-es/ef/core/
+Obe, R. O., &amp; Hsu, L. S. 2017. PostgreSQL: Up and Running: A Practical Guide to the Advanced Open Source Database, O'Reilly Guides, Editorial O'Reilly Media, pp. 20-60. Fecha de consulta: 07 de junio de 2026. Sitio web: https://www.oreilly.com/library/view/postgresql-up-and/9781491957306/
+Otto, M., &amp; Thornton, J. 2023. Bootstrap 5 Documentation, Bootstrap Foundation, Editorial Open Source, Ubicación de la consulta: Online. Fecha de consulta: 07 de junio de 2026. Sitio web: https://getbootstrap.com/docs/5.0/
+PostgreSQL Global Development Group. 2023. PostgreSQL 15 Documentation, PostgreSQL Official Docs, Editorial Global Development Group, Ubicación de la consulta: Online. Fecha de consulta: 07 de junio de 2026. Sitio web: https://www.postgresql.org/docs/15/
+
+Price, M. J. 2021. C# 10 and .NET 6 – Modern Cross-Platform Development, Packt Tech, Editorial Packt Publishing,
+pp. 400-450. Fecha de consulta: 07 de junio de 2026. Sitio web: https://www.packtpub.com/product/c-10-and-net-6-modern-cross-platform-development-sixth-edition/9781801077361
+Smith, J. 2021. Entity Framework Core in Action, Manning Books, Editorial Manning Publications, pp. 200-250. Fecha de consulta: 07 de junio de 2026. Sitio web: https://www.manning.com/books/entity-framework-core-in-action-second-edition
+Spaanjaars, I. 2020. Beginning ASP.NET Core 3, Wrox Programmer to Programmer, Editorial Wrox (John Wiley &amp; Sons), pp. 30-80. Fecha de consulta: 07 de junio de 2026. Sitio web: https://www.wiley.com/en-us/Beginning+ASP+NET+Core+3-p-9781119566970

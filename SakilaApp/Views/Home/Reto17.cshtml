@@ -1,0 +1,26 @@
+@model IEnumerable<SakilaApp.Models.Film>
+@{
+    ViewData["Title"] = "Reto 17 - Películas Alfabéticas";
+}
+
+<h1>Reto 17: Mostrar las primeras 10 películas ordenadas alfabéticamente</h1>
+<a asp-action="Index" class="btn btn-secondary mb-3">Volver al Inicio</a>
+
+<table class="table table-striped table-hover table-bordered">
+    <thead class="table-dark">
+        <tr>
+            <th>Título</th>
+            <th>Descripción</th>
+            <th>Año de Lanzamiento</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model) {
+        <tr>
+            <td>@item.Title</td>
+            <td>@item.Description</td>
+            <td>@item.ReleaseYear</td>
+        </tr>
+    }
+    </tbody>
+</table>

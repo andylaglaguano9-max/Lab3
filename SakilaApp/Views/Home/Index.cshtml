@@ -1,0 +1,53 @@
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center mb-5">
+    <h1 class="display-4">Bienvenido a SakilaApp</h1>
+    <p>Aplicación de conexión a datos utilizando ASP.NET Core MVC, Entity Framework Core y PostgreSQL.</p>
+</div>
+
+<div class="row">
+    <div class="col-md-6 mb-4">
+        <div class="card h-100 shadow-sm border-primary">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Módulos CRUD</h5>
+            </div>
+            <div class="card-body">
+                <p>Módulos principales generados a partir de la base de datos Sakila.</p>
+                <div class="d-grid gap-2">
+                    <a asp-controller="Actors" asp-action="Index" class="btn btn-outline-primary btn-lg">Gestión de Actores</a>
+                    <a asp-controller="Films" asp-action="Index" class="btn btn-outline-primary btn-lg">Gestión de Películas</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 mb-4">
+        <div class="card h-100 shadow-sm border-success">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">Retos LINQ</h5>
+            </div>
+            <div class="card-body">
+                <p>Consultas resueltas como parte de la práctica:</p>
+                <div class="list-group">
+                    <a asp-controller="Home" asp-action="Reto2" class="list-group-item list-group-item-action">
+                        <i class="bi bi-play-circle-fill text-success"></i> Reto 2: Las 10 películas más largas
+                    </a>
+                    <a asp-controller="Home" asp-action="Reto3" class="list-group-item list-group-item-action">
+                        <i class="bi bi-search text-success"></i> Reto 3: Buscar películas por título
+                    </a>
+                    <a asp-controller="Home" asp-action="Reto9" class="list-group-item list-group-item-action">
+                        <i class="bi bi-people-fill text-success"></i> Reto 9: Cantidad total de clientes
+                    </a>
+                    <a asp-controller="Home" asp-action="Reto16" class="list-group-item list-group-item-action">
+                        <i class="bi bi-person-badge text-success"></i> Reto 16: Actores por inicial del apellido
+                    </a>
+                    <a asp-controller="Home" asp-action="Reto17" class="list-group-item list-group-item-action">
+                        <i class="bi bi-sort-alpha-down text-success"></i> Reto 17: Primeras 10 películas alfabéticamente
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

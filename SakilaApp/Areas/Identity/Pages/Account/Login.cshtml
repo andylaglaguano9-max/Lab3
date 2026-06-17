@@ -1,0 +1,225 @@
+@page
+@model LoginModel
+
+@{
+    ViewData["Title"] = "Iniciar Sesión";
+    Layout = "_Layout";
+}
+
+<style>
+    .login-wrapper {
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .login-card {
+        width: 100%;
+        max-width: 440px;
+        border: none;
+        border-radius: 16px;
+        box-shadow: 0 8px 40px rgba(0, 0, 0, 0.12);
+        overflow: hidden;
+    }
+
+    .login-header {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
+        padding: 2.5rem 2rem 2rem;
+        text-align: center;
+        color: white;
+    }
+
+    .login-header .app-icon {
+        font-size: 3rem;
+        margin-bottom: 0.75rem;
+        display: block;
+    }
+
+    .login-header h1 {
+        font-size: 1.6rem;
+        font-weight: 700;
+        margin: 0;
+        letter-spacing: -0.3px;
+    }
+
+    .login-header p {
+        font-size: 0.9rem;
+        opacity: 0.75;
+        margin: 0.25rem 0 0;
+    }
+
+    .login-body {
+        padding: 2rem;
+        background: #fff;
+    }
+
+    .form-floating label {
+        color: #6c757d;
+        font-size: 0.9rem;
+    }
+
+    .form-control:focus {
+        border-color: #0f3460;
+        box-shadow: 0 0 0 0.2rem rgba(15, 52, 96, 0.15);
+    }
+
+    .btn-login {
+        background: linear-gradient(135deg, #1a1a2e, #0f3460);
+        border: none;
+        border-radius: 8px;
+        padding: 0.75rem;
+        font-size: 1rem;
+        font-weight: 600;
+        letter-spacing: 0.3px;
+        transition: opacity 0.2s;
+    }
+
+    .btn-login:hover {
+        opacity: 0.9;
+    }
+
+    .divider {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        color: #adb5bd;
+        font-size: 0.8rem;
+        margin: 1.25rem 0;
+    }
+
+    .divider::before, .divider::after {
+        content: '';
+        flex: 1;
+        border-top: 1px solid #dee2e6;
+    }
+
+    .btn-google {
+        border: 1.5px solid #dee2e6;
+        border-radius: 8px;
+        background: #fff;
+        color: #444;
+        font-weight: 500;
+        padding: 0.65rem;
+        transition: background 0.15s, box-shadow 0.15s;
+        width: 100%;
+    }
+
+    .btn-google:hover {
+        background: #f8f9fa;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .login-footer-links {
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+        margin-top: 1.25rem;
+        font-size: 0.85rem;
+        text-align: center;
+    }
+
+    .login-footer-links a {
+        color: #0f3460;
+        text-decoration: none;
+    }
+
+    .login-footer-links a:hover {
+        text-decoration: underline;
+    }
+
+    .alert-login {
+        border-radius: 8px;
+        font-size: 0.88rem;
+    }
+</style>
+
+<div class="login-wrapper">
+    <div class="login-card">
+
+        <div class="login-header">
+            <i class="bi bi-film app-icon"></i>
+            <h1>SakilaApp</h1>
+            <p>Ingresa tus credenciales para continuar</p>
+        </div>
+
+        <div class="login-body">
+
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="alert alert-danger alert-login d-flex align-items-center gap-2" role="alert">
+                    <i class="bi bi-exclamation-circle-fill"></i>
+                    <div asp-validation-summary="ModelOnly"></div>
+                </div>
+            }
+
+            <form id="account" method="post">
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.Email"
+                           class="form-control"
+                           autocomplete="username"
+                           aria-required="true"
+                           placeholder="correo@espe.edu.ec" />
+                    <label asp-for="Input.Email">
+                        <i class="bi bi-envelope me-1"></i> Correo electrónico
+                    </label>
+                    <span asp-validation-for="Input.Email" class="text-danger small"></span>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.Password"
+                           class="form-control"
+                           autocomplete="current-password"
+                           aria-required="true"
+                           placeholder="Contraseña" />
+                    <label asp-for="Input.Password">
+                        <i class="bi bi-lock me-1"></i> Contraseña
+                    </label>
+                    <span asp-validation-for="Input.Password" class="text-danger small"></span>
+                </div>
+
+                <div class="form-check mb-3">
+                    <input class="form-check-input" asp-for="Input.RememberMe" />
+                    <label class="form-check-label small text-muted" asp-for="Input.RememberMe">
+                        Recordarme en este equipo
+                    </label>
+                </div>
+
+                <button id="login-submit" type="submit" class="w-100 btn btn-primary btn-login text-white">
+                    <i class="bi bi-box-arrow-in-right me-1"></i> Iniciar sesión
+                </button>
+            </form>
+
+            @if ((Model.ExternalLogins?.Count ?? 0) > 0)
+            {
+                <div class="divider">o continúa con</div>
+                <form id="external-account" asp-page="./ExternalLogin"
+                      asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                    @foreach (var provider in Model.ExternalLogins!)
+                    {
+                        <button type="submit" class="btn-google d-flex align-items-center justify-content-center gap-2"
+                                name="provider" value="@provider.Name"
+                                title="Iniciar sesión con @provider.DisplayName">
+                            <i class="bi bi-google"></i>
+                            Continuar con @provider.DisplayName
+                        </button>
+                    }
+                </form>
+            }
+
+            <div class="login-footer-links">
+                <a id="forgot-password" asp-page="./ForgotPassword">
+                    <i class="bi bi-key me-1"></i>¿Olvidaste tu contraseña?
+                </a>
+                <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">
+                    <i class="bi bi-person-plus me-1"></i>Crear una cuenta nueva
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

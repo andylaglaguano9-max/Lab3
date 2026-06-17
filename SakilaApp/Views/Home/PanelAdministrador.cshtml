@@ -1,0 +1,181 @@
+@{
+    ViewData["Title"] = "Panel del Administrador";
+}
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="alert alert-warning d-flex align-items-center" role="alert">
+            <i class="bi bi-shield-lock-fill me-2 fs-5"></i>
+            <strong>Panel del Administrador</strong>&nbsp;&mdash;&nbsp;Acceso exclusivo para el rol <span class="badge bg-danger ms-1">Administrador</span>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card text-white bg-primary mb-3 shadow">
+            <div class="card-header">
+                <i class="bi bi-camera-video-fill me-1"></i> Módulo Films
+            </div>
+            <div class="card-body">
+                <p class="card-text">CRUD completo. Create y Edit restringidos a Administrador y Supervisor. Delete solo Administrador.</p>
+                <a asp-controller="Films" asp-action="Index" class="btn btn-light btn-sm">
+                    <i class="bi bi-arrow-right-circle"></i> Ver Films
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-success mb-3 shadow">
+            <div class="card-header">
+                <i class="bi bi-person-badge-fill me-1"></i> Módulo Actors
+            </div>
+            <div class="card-body">
+                <p class="card-text">Create/Edit para Administrador y Operador. Delete solo para Administrador.</p>
+                <a asp-controller="Actors" asp-action="Index" class="btn btn-light btn-sm">
+                    <i class="bi bi-arrow-right-circle"></i> Ver Actors
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-info mb-3 shadow">
+            <div class="card-header">
+                <i class="bi bi-tags-fill me-1"></i> Módulo Categories
+            </div>
+            <div class="card-body">
+                <p class="card-text">Create/Edit para Administrador y Supervisor. Delete solo para Administrador.</p>
+                <a asp-controller="Categories" asp-action="Index" class="btn btn-light btn-sm">
+                    <i class="bi bi-arrow-right-circle"></i> Ver Categories
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-dark mb-3 shadow">
+            <div class="card-header">
+                <i class="bi bi-translate me-1"></i> Módulo Languages
+            </div>
+            <div class="card-body">
+                <p class="card-text">Acceso completo exclusivo para el rol <strong>Administrador</strong>.</p>
+                <a asp-controller="Languages" asp-action="Index" class="btn btn-light btn-sm">
+                    <i class="bi bi-arrow-right-circle"></i> Ver Languages
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <h4 class="mb-3">
+            <i class="bi bi-table me-1"></i> Matriz de Permisos de Acceso
+        </h4>
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover table-sm">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Módulo / Acción</th>
+                        <th class="text-center">Administrador</th>
+                        <th class="text-center">Supervisor</th>
+                        <th class="text-center">Operador</th>
+                        <th class="text-center">Consulta</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Films &ndash; Listar</td>
+                        <td class="text-center text-success fw-bold"><i class="bi bi-check-circle-fill"></i></td>
+                        <td class="text-center text-success fw-bold"><i class="bi bi-check-circle-fill"></i></td>
+                        <td class="text-center text-success fw-bold"><i class="bi bi-check-circle-fill"></i></td>
+                        <td class="text-center text-success fw-bold"><i class="bi bi-check-circle-fill"></i></td>
+                    </tr>
+                    <tr>
+                        <td>Films &ndash; Crear</td>
+                        <td class="text-center text-success fw-bold"><i class="bi bi-check-circle-fill"></i></td>
+                        <td class="text-center text-success fw-bold"><i class="bi bi-check-circle-fill"></i></td>
+                        <td class="text-center text-danger"><i class="bi bi-x-circle-fill"></i></td>
+                        <td class="text-center text-danger"><i class="bi bi-x-circle-fill"></i></td>
+                    </tr>
+                    <tr>
+                        <td>Films &ndash; Editar</td>
+                        <td class="text-center text-success fw-bold"><i class="bi bi-check-circle-fill"></i></td>
+                        <td class="text-center text-success fw-bold"><i class="bi bi-check-circle-fill"></i></td>
+                        <td class="text-center text-danger"><i class="bi bi-x-circle-fill"></i></td>
+                        <td class="text-center text-danger"><i class="bi bi-x-circle-fill"></i></td>
+                    </tr>
+                    <tr>
+                        <td>Films &ndash; Eliminar</td>
+                        <td class="text-center text-success fw-bold"><i class="bi bi-check-circle-fill"></i></td>
+                        <td class="text-center text-danger"><i class="bi bi-x-circle-fill"></i></td>
+                        <td class="text-center text-danger"><i class="bi bi-x-circle-fill"></i></td>
+                        <td class="text-center text-danger"><i class="bi bi-x-circle-fill"></i></td>
+                    </tr>
+                    <tr>
+                        <td>Actors &ndash; Listar</td>
+                        <td class="text-center text-success fw-bold"><i class="bi bi-check-circle-fill"></i></td>
+                        <td class="text-center text-success fw-bold"><i class="bi bi-check-circle-fill"></i></td>
+                        <td class="text-center text-success fw-bold"><i class="bi bi-check-circle-fill"></i></td>
+                        <td class="text-center text-success fw-bold"><i class="bi bi-check-circle-fill"></i></td>
+                    </tr>
+                    <tr>
+                        <td>Actors &ndash; Crear</td>
+                        <td class="text-center text-success fw-bold"><i class="bi bi-check-circle-fill"></i></td>
+                        <td class="text-center text-danger"><i class="bi bi-x-circle-fill"></i></td>
+                        <td class="text-center text-success fw-bold"><i class="bi bi-check-circle-fill"></i></td>
+                        <td class="text-center text-danger"><i class="bi bi-x-circle-fill"></i></td>
+                    </tr>
+                    <tr>
+                        <td>Actors &ndash; Editar</td>
+                        <td class="text-center text-success fw-bold"><i class="bi bi-check-circle-fill"></i></td>
+                        <td class="text-center text-danger"><i class="bi bi-x-circle-fill"></i></td>
+                        <td class="text-center text-success fw-bold"><i class="bi bi-check-circle-fill"></i></td>
+                        <td class="text-center text-danger"><i class="bi bi-x-circle-fill"></i></td>
+                    </tr>
+                    <tr>
+                        <td>Actors &ndash; Eliminar</td>
+                        <td class="text-center text-success fw-bold"><i class="bi bi-check-circle-fill"></i></td>
+                        <td class="text-center text-danger"><i class="bi bi-x-circle-fill"></i></td>
+                        <td class="text-center text-danger"><i class="bi bi-x-circle-fill"></i></td>
+                        <td class="text-center text-danger"><i class="bi bi-x-circle-fill"></i></td>
+                    </tr>
+                    <tr>
+                        <td>Categories &ndash; Listar</td>
+                        <td class="text-center text-success fw-bold"><i class="bi bi-check-circle-fill"></i></td>
+                        <td class="text-center text-success fw-bold"><i class="bi bi-check-circle-fill"></i></td>
+                        <td class="text-center text-danger"><i class="bi bi-x-circle-fill"></i></td>
+                        <td class="text-center text-success fw-bold"><i class="bi bi-check-circle-fill"></i></td>
+                    </tr>
+                    <tr>
+                        <td>Categories &ndash; Crear/Editar</td>
+                        <td class="text-center text-success fw-bold"><i class="bi bi-check-circle-fill"></i></td>
+                        <td class="text-center text-success fw-bold"><i class="bi bi-check-circle-fill"></i></td>
+                        <td class="text-center text-danger"><i class="bi bi-x-circle-fill"></i></td>
+                        <td class="text-center text-danger"><i class="bi bi-x-circle-fill"></i></td>
+                    </tr>
+                    <tr>
+                        <td>Categories &ndash; Eliminar</td>
+                        <td class="text-center text-success fw-bold"><i class="bi bi-check-circle-fill"></i></td>
+                        <td class="text-center text-danger"><i class="bi bi-x-circle-fill"></i></td>
+                        <td class="text-center text-danger"><i class="bi bi-x-circle-fill"></i></td>
+                        <td class="text-center text-danger"><i class="bi bi-x-circle-fill"></i></td>
+                    </tr>
+                    <tr>
+                        <td>Languages &ndash; Todo</td>
+                        <td class="text-center text-success fw-bold"><i class="bi bi-check-circle-fill"></i></td>
+                        <td class="text-center text-danger"><i class="bi bi-x-circle-fill"></i></td>
+                        <td class="text-center text-danger"><i class="bi bi-x-circle-fill"></i></td>
+                        <td class="text-center text-danger"><i class="bi bi-x-circle-fill"></i></td>
+                    </tr>
+                    <tr>
+                        <td>Panel Administrador</td>
+                        <td class="text-center text-success fw-bold"><i class="bi bi-check-circle-fill"></i></td>
+                        <td class="text-center text-danger"><i class="bi bi-x-circle-fill"></i></td>
+                        <td class="text-center text-danger"><i class="bi bi-x-circle-fill"></i></td>
+                        <td class="text-center text-danger"><i class="bi bi-x-circle-fill"></i></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
