@@ -1,31 +1,29 @@
-# Laboratorio 3: Seguridad y Autenticación en ASP.NET Core MVC
+# Laboratorio 3: Seguridad y Autenticacion en ASP.NET Core MVC
 
-Este repositorio contiene la implementación técnica del **Laboratorio 3**, enfocado en la aplicación de Arquitectura RBAC (Control de Acceso Basado en Roles) utilizando **ASP.NET Core Identity**, **Entity Framework Core** y **PostgreSQL**.
+Este repositorio contiene la implementacion tecnica del Laboratorio 3, enfocado en la aplicacion de Arquitectura RBAC (Control de Acceso Basado en Roles) utilizando ASP.NET Core Identity, Entity Framework Core y PostgreSQL.
 
-## 🛠 Tecnologías Utilizadas
-* **Backend:** C# / .NET 8 (ASP.NET Core MVC)
-* **ORM:** Entity Framework Core
-* **Base de Datos:** PostgreSQL (con Npgsql)
-* **Seguridad:** ASP.NET Core Identity
-* **Autenticación Externa:** OAuth 2.0 / OpenID Connect (Google Login)
+## Tecnologias Utilizadas
+* Backend: C# / .NET 8 (ASP.NET Core MVC)
+* ORM: Entity Framework Core
+* Base de Datos: PostgreSQL (con Npgsql)
+* Seguridad: ASP.NET Core Identity
+* Autenticacion Externa: OAuth 2.0 / OpenID Connect (Google Login)
 
-## 🔐 Características Principales
-1. **Autenticación Local y Federada:** Los usuarios pueden iniciar sesión con credenciales almacenadas localmente (hash PBKDF2) o de forma tercerizada mediante su cuenta de Google.
-2. **Autorización y RBAC:** Implementación del Principio de Mínimo Privilegio (PoLP). Rutas y acciones restringidas según los Claims y perfiles gerenciales:
+## Caracteristicas Principales
+1. Autenticacion Local y Federada: Los usuarios pueden iniciar sesion con credenciales almacenadas localmente (hash PBKDF2) o de forma tercerizada mediante su cuenta de Google.
+2. Autorizacion y RBAC: Implementacion del Principio de Minimo Privilegio (PoLP). Rutas y acciones restringidas segun los Claims y perfiles gerenciales:
    * Administrador
    * Supervisor
    * Operador
    * Consulta
-3. **Renderizado Condicional:** Interfaz gráfica que muta en base a la autorización. Los elementos restringidos se ocultan para perfiles de baja jerarquía para mitigar ataques de enumeración y descubrimiento.
-4. **Matriz de Accesos:** Panel auditor interno que documenta explícitamente los alcances transaccionales (Listar, Crear, Editar, Eliminar) de cada perfil.
-5. **Aislamiento Criptográfico:** `ApplicationDbContext` para la familia de tablas `AspNet` segregado estructuralmente de la lógica de negocio comercial (`SakilaContext`).
+3. Renderizado Condicional: Interfaz grafica que muta en base a la autorizacion. Los elementos restringidos se ocultan para perfiles de baja jerarquia para mitigar ataques de enumeracion y descubrimiento.
+4. Matriz de Accesos: Panel auditor interno que documenta explicitamente los alcances transaccionales (Listar, Crear, Editar, Eliminar) de cada perfil.
+5. Aislamiento Criptografico: ApplicationDbContext para la familia de tablas AspNet segregado estructuralmente de la logica de negocio comercial (SakilaContext).
 
-## 🚀 Despliegue
-La aplicación está completamente habilitada y configurada para su empaquetamiento optimizado para entornos como **IIS (Internet Information Services)** a través del comando nativo:
+## Despliegue
+La aplicacion esta completamente habilitada y configurada para su empaquetamiento optimizado para entornos como IIS (Internet Information Services) a traves del comando nativo:
 
-```bash
 dotnet publish -c Release -o ./publish
-```
 
 ---
-*Desarrollado como evidencia de aprendizaje y rigor académico.*
+Desarrollado como evidencia de aprendizaje y rigor academico.
